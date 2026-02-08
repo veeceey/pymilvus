@@ -92,6 +92,11 @@ class Collection:
                 * *properties* (``dict``, optional)
                     Collection properties.
 
+                * *db_name* (``str``, optional)
+                    Database name. Required when reusing a connection created by MilvusClient
+                    with a non-default database. If not provided, uses the connection's
+                    configured db_name or defaults to 'default'.
+
                 * *timeout* (``float``)
                     An optional duration of time in seconds to allow for the RPCs.
                     If timeout is not set, the client keeps waiting until the server

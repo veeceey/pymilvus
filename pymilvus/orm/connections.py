@@ -584,12 +584,16 @@ class Connections(metaclass=SingleInstanceMetaClass):
             alias (str): The name of milvus connection
             **kwargs:
                 * *client_request_id* (``str``) -- Optional. The client request id.
+                * *db_name* (``str``) -- Optional. Database name to use for this call.
+                    If provided, overrides the connection's configured db_name.
 
         Returns:
-            CallContext: The call context with db_name from the connection config.
+            CallContext: The call context with db_name from the connection config or kwargs.
         """
         config = self.get_connection_addr(alias)
-        db_name = config.get("db_name", "")
+        # Allow kwargs to override config db_name, or provide one if connection was created
+        # with _unbind_with_db=True (e.g., MilvusClient connections)
+        db_name = kwargs.get("db_name", config.get("db_name", ""))
         req_id = kwargs.get("client_request_id") or kwargs.get("client-request-id", "")
         return CallContext(db_name=db_name, client_request_id=req_id)
 
